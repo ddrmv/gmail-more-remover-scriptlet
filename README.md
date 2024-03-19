@@ -1,6 +1,6 @@
 # "More" Remover Scriptlet for Gmail
 
-A scriptlet to remove the "More" buttons from the labels sidebar in Gmail.
+A Tampermonkey script to remove the "More" buttons from the labels sidebar in Gmail.
 
 ## Description
 
@@ -15,26 +15,45 @@ It removes the two "More" buttons to free up some space and to avoid accidentall
 
 ## Usage
 
-The scriptlet is most useful with all commonly used labels being ticked to Show in the label options.
+The script is most useful with all commonly used labels being ticked to Show in the label options. It makes the label lists fixed instead of constantly changing size.
 
 ### Creating the scriptlet:
 
-1. Create a new Bookmark in your browser.
-2. In the name field put an appropriate name (e.g. "noMore" or "Gmail More Remover")
-3. In the url or location field of the bookmark paste the following code:
+1. Get Tampermonkey.
+2. In Tampermonkey select "Create new script..."
+3. Overwrite the contents of the new script with the following code:
 
 ```js
-javascript: (() => { document.querySelectorAll('div.n6').forEach(element => element.remove()); } )();
+// ==UserScript==
+// @name         Gmail More Hider
+// @version      1
+// @description  Hide the two "More" label buttons to stop them automatically expanding
+// @grant        none
+// @match    https://mail.google.com/mail/u/0/*
+// ==/UserScript==
+
+function hideElements() {
+  document.querySelectorAll('div.n6').forEach(element => {
+    element.style.display = 'none';
+  });
+}
+
+// Run the function initially
+hideElements();
+
+// Re-run the function every time the page content is updated
+new MutationObserver(hideElements).observe(document, { childList: true, subtree: true });
 ```
 
 ### Using the scriptlet to remove "More" labels/buttons in Gmail:
 
-1. Navigate to gmail, e.g. https://mail.google.com/mail/u/0/#inbox
-2. Use the scriptlet by using the bookmark you created.
+1. Enable the script in Tampermonkey.
+2. Navigate to gmail, e.g. https://mail.google.com/mail/u/0/#inbox
 
 ### Restoring removed labels/buttons:
 
-1. Refresh the page or navigate away and back to it.
+1. Disable the script in Tampermonkey.
+2. Refresh the page or navigate away and back to it.
 
 ## License
 
